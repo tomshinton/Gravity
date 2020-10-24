@@ -14,8 +14,9 @@ class GRAVITY_API AGravityPlayerController : public APlayerController
 public:
 
 	AGravityPlayerController(const FObjectInitializer& ObjectInititaliser);
-	
+
 private:
 
 	void BeginPlay() override;
+	void AutoManageActiveCameraTarget(AActor* SuggestedTarget) override;
 };

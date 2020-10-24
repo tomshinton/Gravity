@@ -1,6 +1,8 @@
 // Gravity Project - Tom Shinton 2020
 
-#include "GravityPlayerController.h"
+#include "Gravity/Public/GravityPlayerController.h"
+
+#include <Runtime/Camera/Public/GravityCamera.h>
 
 #if !UE_BUILD_SHIPPING
 #include "Gravity/Public/GravityCheatManager.h"
@@ -11,6 +13,8 @@ AGravityPlayerController::AGravityPlayerController(const FObjectInitializer& Obj
 #if !UE_BUILD_SHIPPING
 	CheatClass = UGravityCheatManager::StaticClass();
 #endif //!UE_BUILD_SHIPPING
+
+	SetReplicates(true);
 }
 
 void AGravityPlayerController::BeginPlay()
@@ -20,4 +24,12 @@ void AGravityPlayerController::BeginPlay()
 #if !UE_BUILD_SHIPPING
 	EnableCheats();
 #endif //!UE_BUILD_SHIPPING
+}
+
+void AGravityPlayerController::AutoManageActiveCameraTarget(AActor* SuggestedTarget)
+{
+	if (AGravityCamera* Camera = AGravityCamera::Get(*this))
+	{
+		SetViewTarget(Camera);
+	}
 }
