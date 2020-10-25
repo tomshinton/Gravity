@@ -18,9 +18,9 @@ AGravityPawn::AGravityPawn(const FObjectInitializer& ObjectInitialiser)
 	, PhysicsRoot(ObjectInitialiser.CreateDefaultSubobject<UCapsuleComponent>(this, GravityPawnPrivate::PhysicsRootName))
 	, MovementComponent(ObjectInitialiser.CreateDefaultSubobject<UGravityMovementComponent>(this, GravityPawnPrivate::MovementComponentName))
 {
-	//backcast so we get a primitive component as the root of this pawn
 	SetRootComponent(PhysicsRoot);
-	PhysicsRoot->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	SetPhysicsState(*PhysicsRoot);
 
 	PrimaryActorTick.bCanEverTick = true;
 	SetReplicates(true);
@@ -39,5 +39,16 @@ void AGravityPawn::Tick(float DeltaTime)
 void AGravityPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void AGravityPawn::SetPhysicsState(UPrimitiveComponent& InComponent)
+{
+	InComponent.SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	InComponent.GetBodyInstance()->bLockXRotation = true;
+	InComponent.GetBodyInstance()->bLockYRotation = true;
+	InComponent.GetBodyInstance()->bLockZRotation = true;
+
+	InComponent.GetBodyInstance()->bLockXTranslation = true;
 }
 

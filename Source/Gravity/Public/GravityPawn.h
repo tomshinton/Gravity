@@ -21,13 +21,17 @@ public:
 
 private:	
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* PhysicsRoot;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	UGravityMovementComponent* MovementComponent;
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+
+	void SetPhysicsState(UPrimitiveComponent& InComponent);
 };
