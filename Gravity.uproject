@@ -21,6 +21,11 @@
       "Name": "Movement",
       "Type": "Runtime",
       "LoadingPhase": "Default"
+    },
+    {
+      "Name": "ArenaFramework",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
     }
   ]
 }

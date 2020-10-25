@@ -14,7 +14,6 @@ namespace GravityMovementComponentBindings
 UGravityMovementComponent::UGravityMovementComponent()
 	: MoveSpeed(1.f)
 	, OwningPhysicsRoot(nullptr)
-	, TargetLocation(FVector::ZeroVector)
 	, CurrImpulsePacket()
 	, LastImpulsePacket()
 {
@@ -79,7 +78,7 @@ void UGravityMovementComponent::TickClient(const float InDeltaTime)
 	if (CurrImpulsePacket != LastImpulsePacket)
 	{
 		Server_SetImpulsePacket(CurrImpulsePacket);
-		LastImpulsePacket = CpawnurrImpulsePacket;
+		LastImpulsePacket = CurrImpulsePacket;
 	}
 }
 #endif //WITH_CLIENT_CODE
