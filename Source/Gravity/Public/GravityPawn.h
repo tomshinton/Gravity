@@ -7,6 +7,9 @@
 
 #include "GravityPawn.generated.h"
 
+class UCapsuleComponent;
+class UGravityMovementComponent;
+
 UCLASS(Blueprintable)
 class AGravityPawn : public APawn
 {
@@ -17,6 +20,12 @@ public:
 	AGravityPawn(const FObjectInitializer& ObjectInitialiser);
 
 private:	
+
+	UPROPERTY()
+	UCapsuleComponent* PhysicsRoot;
+
+	UPROPERTY()
+	UGravityMovementComponent* MovementComponent;
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;

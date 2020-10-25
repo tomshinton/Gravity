@@ -18,7 +18,8 @@ public class Gravity : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] 
 		{
-			"Camera"	
+			"Camera",	
+			"Movement",
 		});
 	}
 }

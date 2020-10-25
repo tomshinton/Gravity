@@ -16,6 +16,11 @@
       "Name": "Camera",
       "Type": "Runtime",
       "LoadingPhase": "Default"
+    },
+    {
+      "Name": "Movement",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
     }
   ]
 }
