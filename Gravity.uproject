@@ -26,6 +26,11 @@
       "Name": "ArenaFramework",
       "Type": "Runtime",
       "LoadingPhase": "Default"
+    },
+    {
+      "Name": "Collision",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
     }
   ]
 }

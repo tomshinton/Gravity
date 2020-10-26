@@ -5,7 +5,7 @@
 
 #include "Arena.generated.h"
 
-class UBoxComponent;
+class UArenaBounds;
 class USceneComponent;
 
 UCLASS()
@@ -29,22 +29,28 @@ public:
 	UPROPERTY(EditAnywhere)
 	float ArenaDepth;
 
+	UPROPERTY(EditAnywhere)
+	float TeleportPadding;
+
 private:
-	
+
+	//AActor
 	void OnConstruction(const FTransform& Transform) override;
+	void PostInitializeComponents() override;
+	//~AActor
 
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* TopBound;
+	UPROPERTY()
+	UArenaBounds* TopBound;
 
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* BottomBound;
+	UPROPERTY()
+	UArenaBounds* BottomBound;
 
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* RightBound;
+	UPROPERTY()
+	UArenaBounds* RightBound;
 
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* LeftBound;
+	UPROPERTY()
+	UArenaBounds* LeftBound;
 };

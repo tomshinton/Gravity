@@ -18,6 +18,7 @@ public class Gravity : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] 
 		{
+"Collision",
 "ArenaFramework",
 			"Camera",	
 			"Movement",

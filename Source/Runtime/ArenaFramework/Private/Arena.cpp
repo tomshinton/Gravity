@@ -1,6 +1,6 @@
 #include "Runtime/ArenaFramework/Public/Arena.h"
+#include "Runtime/ArenaFramework/Public/ArenaBounds.h"
 
-#include <Runtime/Engine/Classes/Components/BoxComponent.h>
 #include <Runtime/Engine/Classes/Components/SceneComponent.h>
 
 namespace ArenaPrivate
@@ -10,6 +10,8 @@ namespace ArenaPrivate
 	const FName BottomBound = TEXT("BottomBound");
 	const FName RightBound = TEXT("RightBound");
 	const FName LeftBound = TEXT("LeftBound");
+
+	const FName ArenaBoundsCollisionProfile = TEXT("ArenaBounds");
 }
 
 AArena::AArena(const FObjectInitializer& ObjectInitialiser) 
@@ -18,11 +20,12 @@ AArena::AArena(const FObjectInitializer& ObjectInitialiser)
 	, ArenaHeight(500.f)
 	, BoundWidth(20.f)
 	, ArenaDepth(1000.f)
+	, TeleportPadding(BoundWidth + 20.f)
 	, Root(ObjectInitialiser.CreateDefaultSubobject<USceneComponent>(this, ArenaPrivate::RootComponentName))
-	, TopBound(ObjectInitialiser.CreateDefaultSubobject<UBoxComponent>(this, ArenaPrivate::TopBoundName))
-	, BottomBound(ObjectInitialiser.CreateDefaultSubobject<UBoxComponent>(this, ArenaPrivate::BottomBound))
-	, RightBound(ObjectInitialiser.CreateDefaultSubobject<UBoxComponent>(this, ArenaPrivate::RightBound))
-	, LeftBound(ObjectInitialiser.CreateDefaultSubobject<UBoxComponent>(this, ArenaPrivate::LeftBound))
+	, TopBound(ObjectInitialiser.CreateDefaultSubobject<UArenaBounds>(this, ArenaPrivate::TopBoundName))
+	, BottomBound(ObjectInitialiser.CreateDefaultSubobject<UArenaBounds>(this, ArenaPrivate::BottomBound))
+	, RightBound(ObjectInitialiser.CreateDefaultSubobject<UArenaBounds>(this, ArenaPrivate::RightBound))
+	, LeftBound(ObjectInitialiser.CreateDefaultSubobject<UArenaBounds>(this, ArenaPrivate::LeftBound))
 {
 	SetRootComponent(Root);
 
@@ -30,6 +33,21 @@ AArena::AArena(const FObjectInitializer& ObjectInitialiser)
 	BottomBound->SetupAttachment(Root);
 	RightBound->SetupAttachment(Root);
 	LeftBound->SetupAttachment(Root);
+
+	TopBound->SetCollisionProfileName(ArenaPrivate::ArenaBoundsCollisionProfile);
+	BottomBound->SetCollisionProfileName(ArenaPrivate::ArenaBoundsCollisionProfile);
+	RightBound->SetCollisionProfileName(ArenaPrivate::ArenaBoundsCollisionProfile);
+	LeftBound->SetCollisionProfileName(ArenaPrivate::ArenaBoundsCollisionProfile);
+}
+
+void AArena::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	TopBound->Initialise(*BottomBound, FVector(0.f, 0.f, -ArenaHeight));
+	BottomBound->Initialise(*TopBound, FVector(0.f, 0.f, ArenaHeight));
+	RightBound->Initialise(*LeftBound, FVector(0.f, -ArenaWidth, 0.f));
+	LeftBound->Initialise(*RightBound, FVector(0.f, ArenaWidth, 0.f));
 }
 
 void AArena::OnConstruction(const FTransform& Transform)
@@ -40,14 +58,15 @@ void AArena::OnConstruction(const FTransform& Transform)
 	const float WidthExtent = (ArenaWidth * 0.5f) - BoundWidthExtent;
 	const float HeightExtent = (ArenaHeight * 0.5f) - BoundWidthExtent;
 
-	TopBound->SetBoxExtent(FVector(ArenaDepth, WidthExtent, BoundWidthExtent));
-	BottomBound->SetBoxExtent(FVector(ArenaDepth, WidthExtent, BoundWidthExtent));
-	RightBound->SetBoxExtent(FVector(ArenaDepth, BoundWidth * 0.5f, HeightExtent));
-	LeftBound->SetBoxExtent(FVector(ArenaDepth, BoundWidth * 0.5f, HeightExtent));
-
+	TopBound->SetBoxExtent(FVector(ArenaDepth, WidthExtent + BoundWidth, BoundWidthExtent));
 	TopBound->SetRelativeLocation(FVector(0.f, 0.f, HeightExtent + BoundWidthExtent));
+
+	BottomBound->SetBoxExtent(FVector(ArenaDepth, WidthExtent + BoundWidth, BoundWidthExtent));	
 	BottomBound->SetRelativeLocation(FVector(0.f, 0.f, -(HeightExtent + BoundWidthExtent)));
 
+	RightBound->SetBoxExtent(FVector(ArenaDepth, BoundWidth * 0.5f, HeightExtent));
 	RightBound->SetRelativeLocation(FVector(0.f, WidthExtent + BoundWidthExtent, 0.f));
-	LeftBound->SetRelativeLocation(FVector(0.f, -(WidthExtent + BoundWidthExtent), 0.f));
+
+	LeftBound->SetBoxExtent(FVector(ArenaDepth, BoundWidth * 0.5f, HeightExtent));
+	LeftBound->SetRelativeLocation(FVector(0.f, -(WidthExtent + BoundWidthExtent), 0.f));	
 }
