@@ -15,4 +15,8 @@ class AGravityGameModeBase : public AGameModeBase
 public:
 
 	AGravityGameModeBase();
+
+	//AGameMode
+	virtual TSubclassOf<AGameSession> GetGameSessionClass() const override;
+	//~AGameMode
 };

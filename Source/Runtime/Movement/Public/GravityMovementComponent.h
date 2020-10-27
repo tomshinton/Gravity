@@ -63,7 +63,10 @@ public:
 
 	void BeginPlay() override;
 
+#if WITH_CLIENT_CODE
 	void SetupComponentInputBindings(UInputComponent& PlayerInputComponent) override;
+#endif //WITH_CLIENT_CODE
+
 	void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:

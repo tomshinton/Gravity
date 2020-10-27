@@ -45,6 +45,7 @@ void UGravityMovementComponent::BeginPlay()
 #endif //WITH_SERVER_CODE
 }
 
+#if WITH_CLIENT_CODE
 void UGravityMovementComponent::SetupComponentInputBindings(UInputComponent& PlayerInputComponent)
 {
 	Super::SetupComponentInputBindings(PlayerInputComponent);
@@ -52,6 +53,7 @@ void UGravityMovementComponent::SetupComponentInputBindings(UInputComponent& Pla
 	PlayerInputComponent.BindAxis(GravityMovementComponentBindings::MoveUpBinding, this, &UGravityMovementComponent::MoveUp);
 	PlayerInputComponent.BindAxis(GravityMovementComponentBindings::MoveRightBinding, this, &UGravityMovementComponent::MoveRight);
 }
+#endif //WITH_CLIENT_CODE
 
 void UGravityMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -91,8 +93,8 @@ void UGravityMovementComponent::TickServer(const float InDeltaTime)
 
 	if (OwningPhysicsRoot != nullptr)
 	{
-		OwningPhysicsRoot->AddImpulse(FVector::UpVector * (LastImpulsePacket.UpStrength * MoveSpeed), NAME_None, true);
-		OwningPhysicsRoot->AddImpulse(FVector::RightVector * (LastImpulsePacket.RightStrength * MoveSpeed), NAME_None, true);
+		OwningPhysicsRoot->AddImpulse(FVector::UpVector * ((LastImpulsePacket.UpStrength * MoveSpeed) * InDeltaTime), NAME_None, true);
+		OwningPhysicsRoot->AddImpulse(FVector::RightVector * ((LastImpulsePacket.RightStrength * MoveSpeed) * InDeltaTime), NAME_None, true);
 	}
 }
 #endif //WITH_SERVER_CODE
