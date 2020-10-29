@@ -9,6 +9,10 @@ public class GravityEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "Gravity" } );
+		ExtraModuleNames.AddRange( new string[] 
+		{ 
+			"Gravity",
+			"GravFieldGen"
+		} );
 	}
 }

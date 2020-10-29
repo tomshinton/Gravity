@@ -31,6 +31,11 @@
       "Name": "Collision",
       "Type": "Runtime",
       "LoadingPhase": "Default"
-    }
+    },
+	{
+      "Name": "GravFieldGen",
+	  "Type": "Editor",
+	  "LoadingPhase": "PostEngineInit"
+	}
   ]
 }
