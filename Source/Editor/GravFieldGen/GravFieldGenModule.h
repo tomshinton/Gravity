@@ -1,5 +1,7 @@
 #include <Runtime/Core/Public/Modules/ModuleManager.h>
  
+#include "Editor/GravFieldGen/Public/Tool/GravFieldGeneratorTool.h"
+
 class FGravFieldGenModule : public IModuleInterface
 {
 public:
@@ -10,11 +12,12 @@ public:
 private:
 
 	void InitialiseGenerator();
-
-	void GenerateField();
+	void InitialiseUI();
 
 	void AddToolbarButton(FToolBarBuilder& Builder);
 	TSharedPtr<FUICommandList> ModuleCommands;
+
+	TSharedPtr<FGravFieldGeneratorTool> GenTool;
 };
 
 IMPLEMENT_MODULE(FGravFieldGenModule, GravFieldGen)

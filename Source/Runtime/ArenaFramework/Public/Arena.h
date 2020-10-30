@@ -8,7 +8,7 @@
 class UArenaBounds;
 class USceneComponent;
 
-UCLASS()
+UCLASS(MinimalAPI)
 class AArena : public AActor
 {
 	GENERATED_BODY()

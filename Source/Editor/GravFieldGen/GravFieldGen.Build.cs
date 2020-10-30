@@ -10,6 +10,7 @@ public class GravFieldGen : ModuleRules
 
         PrivateDependencyModuleNames.AddRange(new string[] 
         {
+			"ArenaFramework",
 			"EditorStyle",
             "Engine",
             "CoreUObject",

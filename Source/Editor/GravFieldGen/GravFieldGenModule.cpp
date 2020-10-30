@@ -11,6 +11,7 @@ void FGravFieldGenModule::StartupModule()
 	UE_LOG(GravFieldGenLog, Log, TEXT("Spinning up GravFieldGen module"));
 
 	InitialiseGenerator();
+	InitialiseUI();
 }
 
 void FGravFieldGenModule::ShutdownModule()
@@ -20,13 +21,24 @@ void FGravFieldGenModule::ShutdownModule()
 
 void FGravFieldGenModule::InitialiseGenerator()
 {
+	GenTool = MakeShareable(new FGravFieldGeneratorTool);
+}
+
+void FGravFieldGenModule::InitialiseUI()
+{
+	if (!GenTool.IsValid())
+	{
+		UE_LOG(GravFieldGenLog, Error, TEXT("Cannot initialise UI - generator tool in unitialised"));
+		return;
+	}
+
 	FGravFieldGenEditorStyle::Get();
 	FGravFieldGenCommands::Register();
 
 	ModuleCommands = MakeShareable(new FUICommandList);
 	ModuleCommands->MapAction(
 		FGravFieldGenCommands::Get().GenerateFieldCommand,
-		FExecuteAction::CreateRaw(this, &FGravFieldGenModule::GenerateField)
+		FExecuteAction::CreateRaw(GenTool.Get(), &FGravFieldGeneratorTool::StartTool)
 	);
 
 	FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
@@ -42,16 +54,10 @@ void FGravFieldGenModule::InitialiseGenerator()
 	LevelEditorModule.GetToolBarExtensibilityManager()->AddExtender(Extender);
 }
 
-void FGravFieldGenModule::GenerateField()
-{
-	UE_LOG(GravFieldGenLog, Warning, TEXT("Working! - Build tool now"));
-}
-
 void FGravFieldGenModule::AddToolbarButton(FToolBarBuilder& Builder)
 {
 	const FText NewNodeLabel = FText::FromString("Build Field");
 	const FText NewNodeTooltip = FText::FromString("Generate a gravity field for this level and save results to content");
-	//const FSlateIcon NewNodeIcon = FSlateIcon(FGravFieldGenEditorStyle::GetStyleSetName(), "GravFieldGen.Icon");
 	const FSlateIcon NewNodeIcon = FSlateIcon("GravFieldGen", "Icon");
 
 
